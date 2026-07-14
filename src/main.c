@@ -32,8 +32,7 @@ static volatile uint64_t limine_requests_end_marker[] = LIMINE_REQUESTS_END_MARK
 
 
 
-static inline uint8_t inb(uint16_t port)
-{
+static inline uint8_t inb(uint16_t port) {
     uint8_t value;
     asm volatile ("inb %1, %0"
                   : "=a"(value)
@@ -41,8 +40,7 @@ static inline uint8_t inb(uint16_t port)
     return value;
 }
 
-static inline void io_wait(void)
-{
+static inline void io_wait(void) {
     asm volatile ("outb %%al, $0x80" : : "a"(0));
 }
 
@@ -1112,47 +1110,89 @@ static const uint8_t font[128][7] = {
 };
 
 
-void put_pixel(struct limine_framebuffer *fb, size_t x, size_t y, uint32_t color)
-{
+void put_pixel(struct limine_framebuffer *fb,
+               size_t x,
+               size_t y,
+               uint32_t color){
+    if (x >= fb->width || y >= fb->height)
+        return;
+
     uint32_t *pixel = fb->address;
     pixel[y * (fb->pitch / 4) + x] = color;
 }
 
-void draw_char(struct limine_framebuffer *fb, char c, size_t x, size_t y)
-{
+static void scroll_screen(struct limine_framebuffer *fb) {
+    // Move everything up by one text row (8 pixels).
+    memmove(
+        fb->address,
+        (uint8_t *)fb->address + fb->pitch * 8,
+        fb->pitch * (fb->height - 8)
+    );
+
+    // Clear the bottom 8 pixel rows.
+    memset(
+        (uint8_t *)fb->address + fb->pitch * (fb->height - 8),
+        0,
+        fb->pitch * 8
+    );
+}
+
+static void newline(struct limine_framebuffer *fb) {
+    cursor_x = 10;
+    cursor_y += 8;
+
+    if (cursor_y + 7 >= fb->height)
+    {
+        scroll_screen(fb);
+        cursor_y -= 8;
+    }
+}
+
+void draw_char(struct limine_framebuffer *fb, char c, size_t x, size_t y) {
     unsigned char ch = (unsigned char)c;
 
     for (size_t row = 0; row < 7; row++)
     {
         for (size_t col = 0; col < 5; col++)
         {
+            uint32_t color;
+
             if (font[ch][row] & (1 << (4 - col)))
-            {
-                put_pixel(
-                    fb,
-                    x + col,
-                    y + row,
-                    0xffffffff
-                );
-            }
+                color = 0xffffffff; // white
+            else
+                color = 0x00000000; // black
+
+            put_pixel(fb, x + col, y + row, color);
         }
     }
 }
-void putchar(struct limine_framebuffer *fb, char c)
-{
-    draw_char(fb, c, cursor_x, cursor_y);
 
-    cursor_x += 6;
-
-    if (cursor_x >= fb->width - 6)
+void putchar(struct limine_framebuffer *fb, char c) {
+    switch (c)
     {
-        cursor_x = 10;
-        cursor_y += 8;
+    case '\n':
+        newline(fb);
+        return;
+
+    case '\b':
+        if (cursor_x > 10)
+        {
+            cursor_x -= 6;
+            draw_char(fb, ' ', cursor_x, cursor_y);
+        }
+        return;
     }
+
+    // Wrap BEFORE drawing the character.
+    if (cursor_x + 5 >= fb->width - 10) {
+        newline(fb);
+    }
+
+    draw_char(fb, c, cursor_x, cursor_y);
+    cursor_x += 6;
 }
 
-void print(struct limine_framebuffer *fb, const char *str)
-{
+void print(struct limine_framebuffer *fb, const char *str) {
     while (*str)
     {
         if (*str == '\n')
@@ -1168,8 +1208,7 @@ void print(struct limine_framebuffer *fb, const char *str)
         str++;
     }
 }
-char keyboard_getchar(void)
-{
+char keyboard_getchar(void) {
     for (;;)
     {
         // Wait until the keyboard controller has data.
@@ -1192,8 +1231,7 @@ char keyboard_getchar(void)
 // The following will be our kernel's entry point.
 // If renaming kmain() to something else, make sure to change the
 // linker script accordingly.
-void kmain(void)
-{
+void kmain(void) {
     if (LIMINE_BASE_REVISION_SUPPORTED(limine_base_revision) == false)
     {
         hcf();
@@ -1209,7 +1247,7 @@ void kmain(void)
         framebuffer_request.response->framebuffers[0];
 
     print(framebuffer,
-        " ____  _  _______\n|  _ \\| |/ /_   _|\n| |_) | ' /  | |\n|  _ <| . \\  | |\n|_| \\_\\_|\\_\\ |_|\n-----------------\nOS: RKT\nKernel: RKT 0.1\nCPU: some sort of 64-bit cpu\nRAM: idk\nShell: nonexistent right now\n\n"
+        " ____  _  _______\n|  _ \\| |/ /_   _|\n| |_) | ' /  | |\n|  _ <| . \\  | |\n|_| \\_\\_|\\_\\ |_|\n-----------------\nOS: RKT\nKernel: RKT 0.1\nCPU: some sort of 64-bit cpu\nRAM: idk\nShell: nonexistent right now\n-------------------------------------\n"
     );
 
     while (1)
