@@ -1061,15 +1061,25 @@ void draw_char(struct limine_framebuffer *fb, char c, size_t x, size_t y)
 
 void print(struct limine_framebuffer *fb, const char *str, size_t x, size_t y)
 {
+    size_t start_x = x;
+
     while (*str)
     {
-        draw_char(fb, *str, x, y);
-
-        x += 6; // character width + spacing
+        if (*str == '\n')
+        {
+            x = start_x;
+            y += 8; // 7 pixel font + 1 pixel spacing
+        }
+        else
+        {
+            draw_char(fb, *str, x, y);
+            x += 6;
+        }
 
         str++;
     }
 }
+
 
 
 // The following will be our kernel's entry point.
@@ -1089,7 +1099,7 @@ void kmain(void)
     struct limine_framebuffer *framebuffer =
         framebuffer_request.response->framebuffers[0];
 
-    print(framebuffer, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&'()*+-=.!#$%^ ,:;?@/<>|\[]{}", 10, 10);
+    print(framebuffer, " ____  _  _______\n|  _ \| |/ /_   _|\n| |_) | ' /  | |\n|  _ <| . \  | |\n|_| \_\_|\_\ |_|\n-----------------\nOS: RKT\nKernel: RKT 0.1\nCPU: some sort of 64-bit cpu\nRAM: idk\nShell: nonexistent right now", 10, 10);
 
     hcf();
 }
