@@ -80,11 +80,11 @@ void execute_command(struct limine_framebuffer *fb) {
     else if (strcmp(line_buffer, "rktfetch") == 0)
     {
         print(fb,
-            " ____  _  _______\n"
-            "|  _ \\| |/ /_   _|\n"
-            "| |_) | ' /  | |\n"
-            "|  _ <| . \\  | |\n"
-            "|_| \\_\\_|\\_\\ |_|\n"
+            "    ____  __ ________\n"
+            "   / __ \\/ //_/_  __/\n"
+            "  / /_/ / ,<   / /\n"
+            " / _, _/ /| | / /\n"
+            "/_/ |_/_/ |_|/_/\n"
             "-----------------\n"
             "OS: RKT\n"
             "Kernel: RKT 0.1\n"
@@ -96,7 +96,9 @@ void execute_command(struct limine_framebuffer *fb) {
     }
     else if (line_buffer[0] != '\0')
     {
-        print(fb, "Unknown command\n");
+        print(fb, "Unknown command: ");
+        print(fb, line_buffer);
+        putchar(fb, '\n');
     }
 }
 
