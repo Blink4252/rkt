@@ -7,4 +7,4 @@ this isn't really serious, my end goal is to get a working shell, but if i could
 
 ## INSTRUCTIONS
 
-download image.iso and then use virtual machine software or flash it to a usb (i have only tested it with `dd` so far)
+download rkt.iso and then use virtual machine software or flash it to a usb (i have only tested it with `dd` so far)
