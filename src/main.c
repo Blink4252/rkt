@@ -97,7 +97,10 @@ static void hcf(void) {
 static size_t cursor_x = 10;
 static size_t cursor_y = 10;
 
-static const uint8_t font[][7] = {
+static const uint8_t font[128][7] = {
+
+    // UPPERCASE LETTERS
+
     ['A'] = {
         0b01110,
         0b10001,
@@ -357,6 +360,8 @@ static const uint8_t font[][7] = {
         0b10000,
         0b11111
     },
+
+    // LOWERCASE LETTERS
 
     ['a'] = {
       0b00000,
@@ -619,6 +624,8 @@ static const uint8_t font[][7] = {
         0b11111
     },
     
+    // NUMBERS
+    
     ['0'] = {
         0b01110,
         0b10001,
@@ -719,6 +726,8 @@ static const uint8_t font[][7] = {
         0b01110
     },
 
+    // PUNCTUATION
+
     ['!'] = {
         0b01000,
         0b01000,
@@ -727,6 +736,26 @@ static const uint8_t font[][7] = {
         0b01000,
         0b00000,
         0b01000
+    },
+
+    [' '] = {
+      0b00000,
+      0b00000,
+      0b00000,
+      0b00000,
+      0b00000,
+      0b00000,
+      0b00000
+    },
+
+    ['&'] = {
+      0b01000,
+      0b10100,
+      0b10100,
+      0b01000,
+      0b10101,
+      0b10010,
+      0b01101 
     }
 };
 
@@ -789,7 +818,7 @@ void kmain(void)
     struct limine_framebuffer *framebuffer =
         framebuffer_request.response->framebuffers[0];
 
-    print(framebuffer, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!", 10, 10);
+    print(framebuffer, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&'()*+-=.!#$%^ ,:;?@/<>|\€£[]{}", 10, 10);
 
     hcf();
 }

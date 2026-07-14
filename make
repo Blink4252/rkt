@@ -1,4 +1,3 @@
 #!/bin/bash
 
-make
-./makeiso
+make && ./makeiso
