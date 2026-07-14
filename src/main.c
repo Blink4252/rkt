@@ -98,8 +98,7 @@ static size_t cursor_x = 10;
 static size_t cursor_y = 10;
 
 static const uint8_t font[][7] = {
-    // A
-    {
+    ['A'] = {
         0b01110,
         0b10001,
         0b10001,
@@ -109,8 +108,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // B
-    {
+    ['B'] = {
         0b11110,
         0b10001,
         0b10001,
@@ -120,8 +118,7 @@ static const uint8_t font[][7] = {
         0b11110
     },
 
-    // C
-    {
+    ['C'] = {
         0b01110,
         0b10001,
         0b10000,
@@ -131,8 +128,7 @@ static const uint8_t font[][7] = {
         0b01110
     },
 
-    // D
-    {
+    ['D'] = {
         0b11110,
         0b10001,
         0b10001,
@@ -142,8 +138,7 @@ static const uint8_t font[][7] = {
         0b11110
     },
 
-    // E
-    {
+    ['E'] = {
         0b11111,
         0b10000,
         0b10000,
@@ -153,8 +148,7 @@ static const uint8_t font[][7] = {
         0b11111
     },
 
-    // F
-    {
+    ['F'] = {
         0b11111,
         0b10000,
         0b10000,
@@ -164,8 +158,7 @@ static const uint8_t font[][7] = {
         0b10000
     },
 
-    // G
-    {
+    ['G'] = {
         0b01110,
         0b10001,
         0b10000,
@@ -175,8 +168,7 @@ static const uint8_t font[][7] = {
         0b01110
     },
 
-    // H
-    {
+    ['H'] = {
         0b10001,
         0b10001,
         0b10001,
@@ -186,8 +178,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // I
-    {
+    ['I'] = {
         0b11111,
         0b00100,
         0b00100,
@@ -197,8 +188,7 @@ static const uint8_t font[][7] = {
         0b11111
     },
 
-    // J
-    {
+    ['J'] = {
         0b00010,
         0b00010,
         0b00010,
@@ -208,8 +198,7 @@ static const uint8_t font[][7] = {
         0b01100
     },
 
-    // K
-    {
+    ['K'] = {
         0b10001,
         0b10001,
         0b10010,
@@ -219,8 +208,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // L
-    {
+    ['L'] = {
         0b10000,
         0b10000,
         0b10000,
@@ -230,8 +218,7 @@ static const uint8_t font[][7] = {
         0b11111
     },
 
-    // M
-    {
+    ['M'] = {
         0b10001,
         0b11011,
         0b10101,
@@ -241,8 +228,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // N
-    {
+    ['N'] = {
         0b10001,
         0b10001,
         0b11001,
@@ -252,8 +238,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // O
-    {
+    ['O'] = {
         0b01110,
         0b10001,
         0b10001,
@@ -263,8 +248,7 @@ static const uint8_t font[][7] = {
         0b01110
     },
 
-    // P
-    {
+    ['P'] = {
         0b11110,
         0b10001,
         0b10001,
@@ -274,8 +258,7 @@ static const uint8_t font[][7] = {
         0b10000
     },
 
-    // Q
-    {
+    ['Q'] = {
         0b01110,
         0b10001,
         0b10001,
@@ -285,8 +268,7 @@ static const uint8_t font[][7] = {
         0b01111
     },
 
-    // R
-    {
+    ['R'] = {
         0b11110,
         0b10001,
         0b10001,
@@ -296,8 +278,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // S
-    {
+    ['S'] = {
         0b01111,
         0b10000,
         0b10000,
@@ -307,8 +288,7 @@ static const uint8_t font[][7] = {
         0b11110
     },
 
-    // T
-    {
+    ['T'] = {
         0b11111,
         0b00100,
         0b00100,
@@ -318,8 +298,7 @@ static const uint8_t font[][7] = {
         0b00100
     },
 
-    // U
-    {
+    ['U'] = {
         0b10001,
         0b10001,
         0b10001,
@@ -329,8 +308,7 @@ static const uint8_t font[][7] = {
         0b01110
     },
 
-    // V
-    {
+    ['V'] = {
         0b10001,
         0b10001,
         0b10001,
@@ -340,8 +318,7 @@ static const uint8_t font[][7] = {
         0b00100
     },
 
-    // W
-    {
+    ['W'] = {
         0b10001,
         0b10001,
         0b10001,
@@ -351,8 +328,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // X
-    {
+    ['X'] = {
         0b10001,
         0b10001,
         0b01010,
@@ -362,8 +338,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // Y
-    {
+    ['Y'] = {
         0b10001,
         0b10001,
         0b01010,
@@ -373,8 +348,7 @@ static const uint8_t font[][7] = {
         0b00100
     },
 
-    // Z
-    {
+    ['Z'] = {
         0b11111,
         0b00001,
         0b00010,
@@ -384,8 +358,7 @@ static const uint8_t font[][7] = {
         0b11111
     },
 
-    // a
-    {
+    ['a'] = {
       0b00000,
       0b00000,
       0b01110,
@@ -396,8 +369,7 @@ static const uint8_t font[][7] = {
 
     },
 
-    // b
-    {
+    ['b'] = {
       0b10000,
       0b10000,
       0b10000,
@@ -407,8 +379,7 @@ static const uint8_t font[][7] = {
       0b11110
     },
     
-    // c
-    {
+    ['c'] = {
       0b00000,
       0b00000,
       0b01110,
@@ -418,8 +389,7 @@ static const uint8_t font[][7] = {
       0b01110
     },
     
-    // d
-    {
+    ['d'] = {
       0b00001,
       0b00001,
       0b00001,
@@ -429,8 +399,7 @@ static const uint8_t font[][7] = {
       0b01111
     },
     
-    // e
-    {
+    ['e'] = {
       0b00000,
       0b00000,
       0b01110,
@@ -440,8 +409,7 @@ static const uint8_t font[][7] = {
       0b01111
     },
     
-    // f
-    {
+    ['f'] = {
       0b00110,
       0b01001,
       0b01000,
@@ -451,8 +419,7 @@ static const uint8_t font[][7] = {
       0b01000
     },
     
-    // g
-    {
+    ['g'] = {
       0b00000,
       0b00000,
       0b01110,
@@ -462,8 +429,7 @@ static const uint8_t font[][7] = {
       0b01110
     },
     
-    // h
-    {
+    ['h'] = {
       0b10000,
       0b10000,
       0b10000,
@@ -473,8 +439,7 @@ static const uint8_t font[][7] = {
       0b10001
     },
 
-    // i
-    {
+    ['i'] = {
         0b00100,
         0b00000,
         0b01100,
@@ -484,8 +449,7 @@ static const uint8_t font[][7] = {
         0b01110
     },
 
-    // j
-    {
+    ['j'] = {
         0b00010,
         0b00000,
         0b00110,
@@ -495,8 +459,7 @@ static const uint8_t font[][7] = {
         0b01100
     },
 
-    // k
-    {
+    ['k'] = {
         0b10000,
         0b10000,
         0b10001,
@@ -506,8 +469,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // l
-    {
+    ['l'] = {
         0b01100,
         0b00100,
         0b00100,
@@ -517,8 +479,7 @@ static const uint8_t font[][7] = {
         0b01110
     },
 
-    // m
-    {
+    ['m'] = {
         0b00000,
         0b00000,
         0b11110,
@@ -528,8 +489,7 @@ static const uint8_t font[][7] = {
         0b10101
     },
 
-    // n
-    {
+    ['n'] = {
         0b00000,
         0b00000,
         0b11110,
@@ -539,8 +499,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // o
-    {
+    ['o'] = {
         0b00000,
         0b00000,
         0b01110,
@@ -550,8 +509,7 @@ static const uint8_t font[][7] = {
         0b01110
     },
 
-    // p
-    {
+    ['p'] = {
         0b00000,
         0b00000,
         0b01110,
@@ -561,8 +519,7 @@ static const uint8_t font[][7] = {
         0b01000
     },
 
-    // q
-    {
+    ['q'] = {
         0b00000,
         0b00000,
         0b00111,
@@ -572,8 +529,7 @@ static const uint8_t font[][7] = {
         0b00001
     },
 
-    // r
-    {
+    ['r'] = {
         0b00000,
         0b00000,
         0b10111,
@@ -583,8 +539,7 @@ static const uint8_t font[][7] = {
         0b10000
     },
 
-    // s
-    {
+    ['s'] = {
         0b00000,
         0b00000,
         0b01111,
@@ -594,8 +549,7 @@ static const uint8_t font[][7] = {
         0b11110
     },
 
-    // t
-    {
+    ['t'] = {
         0b00100,
         0b00100,
         0b01110,
@@ -605,8 +559,7 @@ static const uint8_t font[][7] = {
         0b00011
     },
 
-    // u
-    {
+    ['u'] = {
         0b00000,
         0b00000,
         0b10001,
@@ -616,8 +569,7 @@ static const uint8_t font[][7] = {
         0b01101
     },
 
-    // v
-    {
+    ['v'] = {
         0b00000,
         0b00000,
         0b10001,
@@ -627,9 +579,8 @@ static const uint8_t font[][7] = {
         0b00100
     },
 
-    // w
-    {
-        0b00000
+    ['w'] = {
+        0b00000,
         0b00000,
         0b10001,
         0b10001,
@@ -638,8 +589,7 @@ static const uint8_t font[][7] = {
         0b10101
     },
 
-    // x
-    {
+    ['x'] = {
         0b00000,
         0b00000,
         0b10001,
@@ -649,8 +599,7 @@ static const uint8_t font[][7] = {
         0b10001
     },
 
-    // y
-    {
+    ['y'] = {
         0b00000,
         0b00000,
         0b10001,
@@ -660,8 +609,7 @@ static const uint8_t font[][7] = {
         0b11110
     },
 
-    // z
-    {
+    ['z'] = {
         0b00000,
         0b00000,
         0b11111,
@@ -671,19 +619,17 @@ static const uint8_t font[][7] = {
         0b11111
     },
     
-    // 0
-    {
+    ['0'] = {
         0b01110,
+        0b10001,
         0b10011,
         0b10101,
-        0b10101,
-        0b10101,
         0b11001,
+        0b10001,
         0b01110
     },
 
-    // 1
-    {
+    ['1'] = {
         0b00100,
         0b01100,
         0b10100,
@@ -693,19 +639,17 @@ static const uint8_t font[][7] = {
         0b11111
     },
 
-    // 2
-    {
+    ['2'] = {
         0b01110,
         0b10001,
+        0b00001,
         0b00010,
         0b00100,
         0b01000,
-        0b11111,
-        0b00000
+        0b11111
     },
 
-    // 3
-    {
+    ['3'] = {
         0b11110,
         0b00001,
         0b00001,
@@ -715,32 +659,29 @@ static const uint8_t font[][7] = {
         0b11110
     },
 
-    // 4
-    {
+    ['4'] = {
         0b00010,
         0b00110,
         0b01010,
+        0b10010,
         0b11111,
-        0b00010,
         0b00010,
         0b00010
     },
     
-    // 5
-    {
+    ['5'] = {
         0b11111,
         0b10000,
         0b11110,
         0b00001,
         0b00001,
-        0b00001,
-        0b11110
+        0b10001,
+        0b01110
     },
 
-    // 6
-    {
+    ['6'] = {
         0b01110,
-        0b10000,
+        0b10001,
         0b10000,
         0b11110,
         0b10001,
@@ -748,19 +689,17 @@ static const uint8_t font[][7] = {
         0b01110
     },
 
-    // 7
-    {
+    ['7'] = {
         0b11111,
-        0b00010,
+        0b00001,
         0b00010,
         0b00100,
         0b00100,
-        0b01000,
-        0b01000
+        0b00100,
+        0b00100
     },
 
-    // 8
-    {
+    ['8'] = {
         0b01110,
         0b10001,
         0b10001,
@@ -770,19 +709,17 @@ static const uint8_t font[][7] = {
         0b01110
     },
 
-    // 9
-    {
+    ['9'] = {
         0b01110,
         0b10001,
         0b10001,
         0b01111,
         0b00001,
-        0b00001,
+        0b10001,
         0b01110
     },
 
-    // !
-    {
+    ['!'] = {
         0b01000,
         0b01000,
         0b01000,
@@ -800,36 +737,15 @@ void put_pixel(struct limine_framebuffer *fb, size_t x, size_t y, uint32_t color
     pixel[y * (fb->pitch / 4) + x] = color;
 }
 
-int char_to_index(char c)
-{
-    if (c >= 'A' && c <= 'Z')
-        return c - 'A';
-
-    if (c >= 'a' && c <= 'z')
-        return 26 + (c - 'a');
-
-    if (c >= '0' && c <= '9')
-        return 50 + (c - '0');
-    
-
-    if (c == '!')
-        return 62;
-
-    return -1;
-}
-
 void draw_char(struct limine_framebuffer *fb, char c, size_t x, size_t y)
 {
-    int index = char_to_index(c);
-
-    if (index < 0)
-        return;
+    unsigned char ch = (unsigned char)c;
 
     for (size_t row = 0; row < 7; row++)
     {
         for (size_t col = 0; col < 5; col++)
         {
-            if (font[index][row] & (1 << (4 - col)))
+            if (font[ch][row] & (1 << (4 - col)))
             {
                 put_pixel(
                     fb,
@@ -873,7 +789,7 @@ void kmain(void)
     struct limine_framebuffer *framebuffer =
         framebuffer_request.response->framebuffers[0];
 
-    print(framebuffer, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!", 10, 10);
+    print(framebuffer, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!", 10, 10);
 
     hcf();
 }
