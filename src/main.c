@@ -108,8 +108,35 @@ static void hcf(void) {
     }
 }
 
+int strcmp(const char *a, const char *b)
+{
+    while (*a && (*a == *b))
+    {
+        a++;
+        b++;
+    }
+
+    return *(unsigned char *)a - *(unsigned char *)b;
+}
+
 static size_t cursor_x = 10;
 static size_t cursor_y = 10;
+
+static bool shift_pressed = false;
+static bool caps_lock = false;
+
+#define LINE_MAX 128
+
+static char line_buffer[LINE_MAX];
+static size_t line_length = 0;
+
+void putchar(struct limine_framebuffer *fb, char c);
+void print(struct limine_framebuffer *fb, const char *str);
+char keyboard_getchar(void);
+
+void read_line(struct limine_framebuffer *fb);
+void print_prompt(struct limine_framebuffer *fb);
+void shell(struct limine_framebuffer *fb);
 
 static const char scancode_to_ascii[128] = {
     [0x02] = '1',
@@ -172,6 +199,70 @@ static const char scancode_to_ascii[128] = {
     [0x33] = ',',
     [0x34] = '.',
     [0x35] = '/',
+
+    [0x39] = ' ',
+};
+
+static const char scancode_to_ascii_shift[128] = {
+    [0x02] = '!',
+    [0x03] = '@',
+    [0x04] = '#',
+    [0x05] = '$',
+    [0x06] = '%',
+    [0x07] = '^',
+    [0x08] = '&',
+    [0x09] = '*',
+    [0x0A] = '(',
+    [0x0B] = ')',
+
+    [0x0C] = '_',
+    [0x0D] = '+',
+
+    [0x0E] = '\b',
+    [0x0F] = '\t',
+
+    [0x10] = 'Q',
+    [0x11] = 'W',
+    [0x12] = 'E',
+    [0x13] = 'R',
+    [0x14] = 'T',
+    [0x15] = 'Y',
+    [0x16] = 'U',
+    [0x17] = 'I',
+    [0x18] = 'O',
+    [0x19] = 'P',
+
+    [0x1A] = '{',
+    [0x1B] = '}',
+
+    [0x1C] = '\n',
+
+    [0x1E] = 'A',
+    [0x1F] = 'S',
+    [0x20] = 'D',
+    [0x21] = 'F',
+    [0x22] = 'G',
+    [0x23] = 'H',
+    [0x24] = 'J',
+    [0x25] = 'K',
+    [0x26] = 'L',
+
+    [0x27] = ':',
+    [0x28] = '"',
+
+    [0x2B] = '|',
+
+    [0x2C] = 'Z',
+    [0x2D] = 'X',
+    [0x2E] = 'C',
+    [0x2F] = 'V',
+    [0x30] = 'B',
+    [0x31] = 'N',
+    [0x32] = 'M',
+
+    [0x33] = '<',
+    [0x34] = '>',
+    [0x35] = '?',
 
     [0x39] = ' ',
 };
@@ -245,7 +336,7 @@ static const uint8_t font[128][7] = {
         0b10001,
         0b10000,
         0b10111,
-        0b10101,
+        0b10001,
         0b10001,
         0b01110
     },
@@ -1217,14 +1308,148 @@ char keyboard_getchar(void) {
 
         uint8_t scancode = inb(0x60);
 
-        // Ignore key releases.
         if (scancode & 0x80)
+        {
+            scancode &= 0x7F;
+
+            if (scancode == 0x2A || scancode == 0x36)
+                shift_pressed = false;
+
+            continue;
+        }
+
+        if (scancode == 0x2A || scancode == 0x36)
+        {
+            shift_pressed = true;
+            continue;
+        }
+
+        char c;
+
+        if (shift_pressed)
+            c = scancode_to_ascii_shift[scancode];
+        else
+            c = scancode_to_ascii[scancode];
+
+        if (c == 0)
             continue;
 
-        char c = scancode_to_ascii[scancode];
+        if (caps_lock ^ shift_pressed)
+        {
+            if (c >= 'a' && c <= 'z')
+                c -= 32;
+        }
 
-        if (c != 0)
-            return c;
+        return c;
+    }
+}
+
+void read_line(struct limine_framebuffer *fb) {
+    line_length = 0;
+
+    while (1)
+    {
+        char c = keyboard_getchar();
+
+        if (c == '\n')
+        {
+            line_buffer[line_length] = '\0';
+            putchar(fb, '\n');
+            return;
+        }
+
+        if (c == '\b')
+        {
+            if (line_length > 0)
+            {
+                line_length--;
+                putchar(fb, '\b');
+            }
+
+            continue;
+        }
+
+        // Ignore unknown keys
+        if (c == 0)
+            continue;
+
+        if (line_length < LINE_MAX - 1)
+        {
+            line_buffer[line_length++] = c;
+            putchar(fb, c);
+        }
+    }
+}
+
+void clear_screen(struct limine_framebuffer *fb) {
+    memset(
+        fb->address,
+        0,
+        fb->pitch * fb->height
+    );
+
+    cursor_x = 10;
+    cursor_y = 10;
+}
+
+void print_prompt(struct limine_framebuffer *fb) {
+    print(fb, "RKT> ");
+}
+
+void execute_command(struct limine_framebuffer *fb) {
+    if (strcmp(line_buffer, "about") == 0)
+    {
+        print(fb,
+            "RKT OS\n"
+            "Kernel: RKT 0.1\n"
+            "Made from scratch\n"
+        );
+    }
+    else if (strcmp(line_buffer, "help") == 0)
+    {
+        print(fb,
+            "Commands:\n"
+            " help\n"
+            " about\n"
+            " clear\n"
+            " rktfetch\n"
+        );
+    }
+    else if (strcmp(line_buffer, "clear") == 0)
+    {
+        clear_screen(fb);
+    }
+    else if (strcmp(line_buffer, "rktfetch") == 0)
+    {
+        print(fb,
+            " ____  _  _______\n"
+            "|  _ \\| |/ /_   _|\n"
+            "| |_) | ' /  | |\n"
+            "|  _ <| . \\  | |\n"
+            "|_| \\_\\_|\\_\\ |_|\n"
+            "-----------------\n"
+            "OS: RKT\n"
+            "Kernel: RKT 0.1\n"
+            "CPU: some sort of 64-bit cpu\n"
+            "RAM: idk\n"
+            "Shell: rktsh 0.1\n"
+            "-------------------------------------\n"
+        );
+    }
+    else if (line_buffer[0] != '\0')
+    {
+        print(fb, "Unknown command\n");
+    }
+}
+
+void shell(struct limine_framebuffer *fb) {
+    while (1)
+    {
+        print_prompt(fb);
+
+        read_line(fb);
+
+        execute_command(fb);
     }
 }
 
@@ -1247,13 +1472,10 @@ void kmain(void) {
         framebuffer_request.response->framebuffers[0];
 
     print(framebuffer,
-        " ____  _  _______\n|  _ \\| |/ /_   _|\n| |_) | ' /  | |\n|  _ <| . \\  | |\n|_| \\_\\_|\\_\\ |_|\n-----------------\nOS: RKT\nKernel: RKT 0.1\nCPU: some sort of 64-bit cpu\nRAM: idk\nShell: nonexistent right now\n-------------------------------------\n"
+        " ____  _  _______\n|  _ \\| |/ /_   _|\n| |_) | ' /  | |\n|  _ <| . \\  | |\n|_| \\_\\_|\\_\\ |_|\n-----------------\nOS: RKT\nKernel: RKT 0.1\nCPU: some sort of 64-bit cpu\nRAM: idk\nShell: rktsh 0.1\n-------------------------------------\n"
     );
 
-    while (1)
-    {
-        putchar(framebuffer, keyboard_getchar());
-    }
+    shell(framebuffer);
 
     hcf();
 }
