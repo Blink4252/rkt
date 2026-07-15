@@ -78,3 +78,26 @@ bool starts_with(const char *str, const char *prefix)
 
     return true;
 }
+
+char *strchr(const char *str, int c)
+{
+    while (*str)
+    {
+        if (*str == c)
+            return (char *)str;
+
+        str++;
+    }
+
+    return NULL;
+}
+
+size_t strlen(const char *str)
+{
+    size_t len = 0;
+
+    while (str[len])
+        len++;
+
+    return len;
+}

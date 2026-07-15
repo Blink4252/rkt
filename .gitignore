@@ -1,0 +1,28 @@
+# Build output
+obj/
+build/
+*.o
+*.d
+
+# Compiled binaries
+*.elf
+*.bin
+*.iso
+
+# Debug symbols
+*.debug
+*.map
+
+# Editor stuff
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.swp
+*.swo
+
+tail

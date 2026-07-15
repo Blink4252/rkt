@@ -73,6 +73,9 @@ void execute_command(struct limine_framebuffer *fb) {
             " clear\n"
             " rktfetch\n"
             " ls\n"
+            " touch\n"
+            " cat\n"
+            " echo\n"
         );
     }
     else if (strcmp(line_buffer, "clear") == 0)
@@ -100,13 +103,53 @@ void execute_command(struct limine_framebuffer *fb) {
     {
         fs_list();
     }
+    else if (starts_with(line_buffer, "cat "))
+    {
+        char buffer[4096];
+
+        int bytes = fs_read(line_buffer + 4, buffer, sizeof(buffer) - 1);
+
+        if (bytes < 0)
+        {
+            print(fb, "File not found\n");
+        }
+        else
+        {
+            buffer[bytes] = '\0';
+            print(fb, buffer);
+            putchar(fb, '\n');
+        }
+    }
     else if (starts_with(line_buffer, "touch "))
-{
-    if (fs_create(line_buffer + 6))
-        print(fb, "File created.\n");
-    else
-        print(fb, "Couldn't create file.\n");
-}
+    {
+        if (fs_create(line_buffer + 6))
+            print(fb, "File created.\n");
+        else
+            print(fb, "Couldn't create file.\n");
+    }
+    else if (starts_with(line_buffer, "echo "))
+    {
+        char *redirect = strchr(line_buffer, '>');
+
+        if (redirect)
+        {
+            *redirect = '\0';
+
+            char *filename = redirect + 1;
+
+            while (*filename == ' ')
+                filename++;
+
+            char *text = line_buffer + 5;
+
+            fs_write(filename, text, strlen(text));
+
+            return;
+        }
+
+        print(fb, line_buffer + 5);
+        putchar(fb, '\n');
+    }
     else if (line_buffer[0] != '\0')
     {
         print(fb, "Unknown command: ");

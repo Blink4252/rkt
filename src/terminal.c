@@ -59,6 +59,7 @@ void putchar(struct limine_framebuffer *fb, char c) {
     {
     case '\n':
         newline(fb);
+        draw_cursor(fb);
         return;
 
     case '\b':
@@ -67,6 +68,7 @@ void putchar(struct limine_framebuffer *fb, char c) {
             cursor_x -= 6;
             draw_char(fb, ' ', cursor_x, cursor_y);
         }
+        draw_cursor(fb);
         return;
     }
 

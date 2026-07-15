@@ -1,5 +1,6 @@
 #include "rktfs.h"
 #include "terminal.h"
+#include "string.h"
 
 extern struct limine_framebuffer *terminal_fb;
 
@@ -25,7 +26,8 @@ bool rktfs_exists(const char *path)
         if (!fs.files[i].used)
             continue;
 
-        // TODO: compare filenames
+        if (strcmp(fs.files[i].name, path) == 0)
+            return true;
     }
 
     return false;
@@ -37,9 +39,27 @@ int rktfs_read(
     size_t buffer_size
 )
 {
-    (void)path;
-    (void)buffer;
-    (void)buffer_size;
+    for (int i = 0; i < RKTFS_MAX_FILES; i++)
+    {
+        if (!fs.files[i].used)
+            continue;
+
+        if (strcmp(fs.files[i].name, path) == 0)
+        {
+            size_t bytes = fs.files[i].size;
+
+            if (bytes > buffer_size)
+                bytes = buffer_size;
+
+            memcpy(
+                buffer,
+                fs.files[i].data,
+                bytes
+            );
+
+            return bytes;
+        }
+    }
 
     return -1;
 }
@@ -50,9 +70,27 @@ bool rktfs_write(
     size_t size
 )
 {
-    (void)path;
-    (void)data;
-    (void)size;
+    for (int i = 0; i < RKTFS_MAX_FILES; i++)
+    {
+        if (!fs.files[i].used)
+            continue;
+
+        if (strcmp(fs.files[i].name, path) == 0)
+        {
+            if (size > RKTFS_MAX_FILE_SIZE)
+                size = RKTFS_MAX_FILE_SIZE;
+
+            memcpy(
+                fs.files[i].data,
+                data,
+                size
+            );
+
+            fs.files[i].size = size;
+
+            return true;
+        }
+    }
 
     return false;
 }
@@ -84,8 +122,6 @@ void rktfs_list(void)
         print(terminal_fb, "(no files)\n");
     }
 }
-
-static rktfs_header_t fs;
 
 bool rktfs_create(const char *path)
 {
