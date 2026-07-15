@@ -26,8 +26,18 @@ void kmain(void)
         framebuffer_request.response->framebuffers[0];
 
     print(fb,
-        "RKT OS\n"
-        "Kernel: RKT 0.1\n"
+            "    ____  __ ________\n"
+            "   / __ \\/ //_/_  __/\n"
+            "  / /_/ / ,<   / /\n"
+            " / _, _/ /| | / /\n"
+            "/_/ |_/_/ |_|/_/\n"
+            "-----------------\n"
+            "OS: RKT\n"
+            "Kernel: RKT 0.1\n"
+            "CPU: some sort of 64-bit cpu\n"
+            "RAM: idk\n"
+            "Shell: rktsh 0.1\n"
+            "-------------------------------------\n"
     );
 
     shell(fb);

@@ -39,8 +39,22 @@ void draw_char(struct limine_framebuffer *fb, char c, size_t x, size_t y) {
     }
 }
 
+void draw_cursor(struct limine_framebuffer *fb)
+{
+    for (int x = 0; x < 5; x++)
+        put_pixel(fb, cursor_x + x, cursor_y + 6, 0xffffffff);
+}
+
+void erase_cursor(struct limine_framebuffer *fb)
+{
+    for (int x = 0; x < 5; x++)
+        put_pixel(fb, cursor_x + x, cursor_y + 6, 0x00000000);
+}
 
 void putchar(struct limine_framebuffer *fb, char c) {
+
+    erase_cursor(fb);
+
     switch (c)
     {
     case '\n':
@@ -63,6 +77,8 @@ void putchar(struct limine_framebuffer *fb, char c) {
 
     draw_char(fb, c, cursor_x, cursor_y);
     cursor_x += 6;
+
+    draw_cursor(fb);
 }
 
 void print(struct limine_framebuffer *fb, const char *str) {
