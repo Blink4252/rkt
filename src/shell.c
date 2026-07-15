@@ -6,6 +6,7 @@
 #include "terminal.h"
 #include "string.h"
 #include "framebuffer.h"
+#include "fs.h"
 
 #define LINE_MAX 128
 
@@ -71,6 +72,7 @@ void execute_command(struct limine_framebuffer *fb) {
             " about\n"
             " clear\n"
             " rktfetch\n"
+            " ls\n"
         );
     }
     else if (strcmp(line_buffer, "clear") == 0)
@@ -94,6 +96,17 @@ void execute_command(struct limine_framebuffer *fb) {
             "-------------------------------------\n"
         );
     }
+    else if (strcmp(line_buffer, "ls") == 0)
+    {
+        fs_list();
+    }
+    else if (starts_with(line_buffer, "touch "))
+{
+    if (fs_create(line_buffer + 6))
+        print(fb, "File created.\n");
+    else
+        print(fb, "Couldn't create file.\n");
+}
     else if (line_buffer[0] != '\0')
     {
         print(fb, "Unknown command: ");

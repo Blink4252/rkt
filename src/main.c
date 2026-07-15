@@ -3,7 +3,9 @@
 #include <stdint.h>
 #include "terminal.h"
 #include "shell.h"
+#include "fs.h"
 
+struct limine_framebuffer *terminal_fb;
 extern volatile uint64_t limine_base_revision[];
 extern volatile struct limine_framebuffer_request framebuffer_request;
 
@@ -22,8 +24,10 @@ void kmain(void)
         framebuffer_request.response->framebuffer_count < 1)
         hcf();
 
-    struct limine_framebuffer *fb =
+    terminal_fb =
         framebuffer_request.response->framebuffers[0];
+
+    struct limine_framebuffer *fb = terminal_fb;
 
     print(fb,
             "    ____  __ ________\n"
@@ -39,6 +43,8 @@ void kmain(void)
             "Shell: rktsh 0.1\n"
             "-------------------------------------\n"
     );
+
+    fs_init();
 
     shell(fb);
 }

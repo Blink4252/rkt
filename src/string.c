@@ -64,3 +64,17 @@ int strcmp(const char *a, const char *b)
     return *(unsigned char *)a - *(unsigned char *)b;
 }
 
+
+bool starts_with(const char *str, const char *prefix)
+{
+    while (*prefix)
+    {
+        if (*str != *prefix)
+            return false;
+
+        str++;
+        prefix++;
+    }
+
+    return true;
+}
